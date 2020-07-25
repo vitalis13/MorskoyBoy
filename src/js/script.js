@@ -7,28 +7,25 @@ const context = canvas.getContext('2d');
 canvas.width = 1000;
 canvas.height = 550;
 
-const player = new Topology({
-    offsetX: 50,
-    offsetY: 100
-});
+const mouse = getMouse(canvas);
 
-player
-    .addSheeps(
-        {x: 0, y: 0, direct: 0, size: 3},
-        {x: 0, y: 2, direct: 1, size: 4},
-    )
-    .addChecks(
-        {x: 5, y: 5},
-        {x: 5, y: 4}
-    );
+
+
+// setInterval(() => console.log(player.getCoordinats(mouse)));
+
+
 
 
 drawGrid();
 
 
-player.draw(context);
-player.drawSheep(context,{x: 0, y: 0, direct: 0, size: 3});
-player.drawCheck(context,{x: 5, y: 5});
+
+
+const game = new Game();
+
+function clearCanvas() {
+    canvas.width |= 0
+}
 
 function drawGrid() {
 

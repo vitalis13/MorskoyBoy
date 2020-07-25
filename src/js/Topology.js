@@ -125,5 +125,112 @@ class Topology {
         return this
     }
 
+    isPointUnder(point) {
+        if (
+            point.x < this.offsetX + FIELD_SIZE ||
+            point.x > this.offsetX + 11 * FIELD_SIZE ||
+            point.y < this.offsetY + FIELD_SIZE ||
+            point.y > this.offsetY + 11 * FIELD_SIZE) {
+            return false
+        }
+        return true
+    }
+
+    getCoordinats(point) {
+        if (!this.isPointUnder(point)) {
+            return false
+        }
+        // const x = parseInt((point.x - this.offsetX - FIELD_SIZE) / FIELD_SIZE);
+        // const y = parseInt((point.y - this.offsetY - FIELD_SIZE) / FIELD_SIZE);
+        return {
+            x:parseInt((point.x - this.offsetX - FIELD_SIZE) / FIELD_SIZE),
+            y:parseInt((point.y - this.offsetY - FIELD_SIZE) / FIELD_SIZE)
+        }
+    }
+
+    canStay (sheep) {
+        if(sheep.direct === 0 && sheep.x + sheep.size >10){
+            return false
+        }
+        if(sheep.direct === 1 && sheep.y + sheep.size > 10){
+            return false
+        }
+
+        const map = [
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+            [true, true, true, true, true, true, true, true, true, true,],
+        ]
+
+        for (const sheep of this.sheeps) {
+            if (sheep.direct === 0) {
+                for (let x = sheep.x - 1; x < sheep.x + sheep.size + 1; x++) {
+                    for (let y = sheep.y - 1; y < sheep.y + 2; y++) {
+                        if (map[y] && map[y][x]) {
+                            map [y][x] = false
+                        }
+                    }
+                }
+            } else {
+                for (let x = sheep.x - 1; x < sheep.x + 2; x++) {
+                    for (let y = sheep.y - 1; y < sheep.y + sheep.size + 1; y++) {
+                        if (map[y] && map[y][x]) {
+                            map [y][x] = false
+                        }
+                    }
+                }
+            }
+        }
+        if (sheep.direct === 0) {
+            for (let i = 0; i < sheep.size; i++) {
+                if (!map[sheep.y][sheep.x + i]) {
+                    return false
+                }
+            }
+        } else {
+            for (let i = 0; i < sheep.size; i++) {
+                if (!map[sheep.y + i][sheep.x]) {
+                    return false
+                }
+            }
+        }
+        return true
+
+    }
+
+    randoming(){
+        this.sheeps = [];
+
+        for (let size = 4; size > 0; size--) {
+            for (let n = 0; n < 5 - size; n++) {
+                let flag = false
+                while (!flag) {
+                    const sheep = {
+                        x: Math.floor((Math.random() * 10)),
+                        y: Math.floor((Math.random() * 10)),
+                        direct: Math.random() > Math.random() ? 0 : 1,
+                        size
+                    }
+                    if (this.canStay(sheep)) {
+                        this.addSheeps(sheep)
+                        flag = true
+                    }
+                }
+
+            }
+        }
+
+    }
+
+
+
+
 
 }
