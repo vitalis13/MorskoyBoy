@@ -12,16 +12,22 @@ function getMouse(element) {
         mouse.y = event.clientY -rect.top;
     });
 
-    element.addEventListener('whell', function (event) {
+    element.addEventListener('wheel', function (event) {
         mouse.s = !mouse.s;
     });
 
-    element.addEventListener('mousediwn', function (event) {
+    element.addEventListener('mousedown', function (event) {
+        if(event.buttons === 1){
+            mouse.left = true
+        }
 
     });
     element.addEventListener('mouseup', function (event) {
+        if(event.buttons !== 1){
+            mouse.left = false
+        }
 
-    })
+    });
 
     return mouse
 }
